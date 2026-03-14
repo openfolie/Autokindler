@@ -7,11 +7,18 @@
     "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
-    "@autokindler/db": "workspace:*"
+    "@autokindler/db": "workspace:*",
+    "@aws-sdk/client-sqs": "^3.1009.0",
+    "@hono/node-server": "^1.19.11",
+    "@hono/zod-validator": "^0.7.6",
+    "drizzle-orm": "^0.38.4",
+    "hono": "^4.12.7",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "typescript": "^5.7.0",
+    "@types/node": "^22.0.0",
     "tsx": "^4.19.0",
-    "@types/node": "^22.0.0"
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.0"
   }
 }

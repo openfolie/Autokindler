@@ -1,0 +1,28 @@
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { logger } from "hono/logger";
+import { serve } from "@hono/node-server";
+import { env } from "./lib/env.js";
+import { deliveryRoutes } from "./routes/deliveries.js";
+import { userRoutes } from "./routes/users.js";
+
+const app = new Hono();
+
+// Global middleware
+app.use("*", cors());
+app.use("*", logger());
+
+// Health check
+app.get("/health", (c) => c.json({ status: "ok" }));
+
+// Mount routes
+app.route("/api/deliveries", deliveryRoutes);
+app.route("/api/users", userRoutes);
+
+// Start server
+console.log(`Starting Hono server on port ${env.PORT}...`);
+serve({ fetch: app.fetch, port: env.PORT }, (info) => {
+  console.log(`Server running at http://localhost:${info.port}`);
+});
+
+export default app;
