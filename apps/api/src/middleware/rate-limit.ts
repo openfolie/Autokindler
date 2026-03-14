@@ -6,7 +6,8 @@ interface RateLimitEntry {
 
 /**
  * In-memory sliding window rate limiter.
- * Tracks requests per user (X-User-Id header) with cleanup on each check.
+ * Tracks requests per authenticated user (from JWT via c.get('userId')).
+ * Must run AFTER auth middleware in the middleware chain.
  */
 export function rateLimiter(opts: {
   windowMs: number;
@@ -15,7 +16,7 @@ export function rateLimiter(opts: {
   const store = new Map<string, RateLimitEntry>();
 
   return async (c, next) => {
-    const userId = c.req.header("X-User-Id");
+    const userId = c.get("userId") as string | undefined;
     if (!userId) {
       // If no user ID, skip rate limiting (auth middleware will reject anyway)
       return next();

@@ -5,6 +5,7 @@ import { eq, and } from "drizzle-orm";
 import { db, users, deliveryLog } from "@autokindler/db";
 import { enqueueDelivery } from "../lib/sqs.js";
 import { rateLimiter } from "../middleware/rate-limit.js";
+import { authMiddleware } from "../middleware/auth.js";
 
 const arxivUrlPattern =
   /^https?:\/\/arxiv\.org\/(abs|html|pdf)\/\d{4}\.\d{4,5}(v\d+)?(\.pdf)?$/;
@@ -22,6 +23,9 @@ const createDeliverySchema = z.object({
 const uuidSchema = z.string().uuid();
 
 export const deliveryRoutes = new Hono();
+
+// Apply auth middleware to all delivery routes
+deliveryRoutes.use("*", authMiddleware);
 
 // Rate limit: 5 POST requests per hour per user
 const deliveryRateLimit = rateLimiter({ windowMs: 3600000, max: 5 });
@@ -42,13 +46,7 @@ deliveryRoutes.post(
     }
   }),
   async (c) => {
-    const userId = c.req.header("X-User-Id");
-    if (!userId) {
-      return c.json(
-        { success: false, error: "Missing X-User-Id header" },
-        401
-      );
-    }
+    const userId = c.get("userId") as string;
 
     const { url } = c.req.valid("json");
 
@@ -118,14 +116,7 @@ deliveryRoutes.post(
 // GET /api/deliveries/:id — check delivery status
 deliveryRoutes.get("/:id", async (c) => {
   const { id } = c.req.param();
-  const userId = c.req.header("X-User-Id");
-
-  if (!userId) {
-    return c.json(
-      { success: false, error: "Missing X-User-Id header" },
-      401
-    );
-  }
+  const userId = c.get("userId") as string;
 
   // Validate UUID format
   const parsed = uuidSchema.safeParse(id);

@@ -3,6 +3,7 @@ import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { db, users, userPreferences } from "@autokindler/db";
+import { authMiddleware } from "../middleware/auth.js";
 
 const updateUserSchema = z.object({
   kindle_email: z.string().email("Must be a valid email").optional(),
@@ -23,15 +24,12 @@ const updateUserSchema = z.object({
 
 export const userRoutes = new Hono();
 
+// Apply auth middleware to all user routes
+userRoutes.use("*", authMiddleware);
+
 // GET /api/users/me — retrieve user profile + preferences
 userRoutes.get("/me", async (c) => {
-  const userId = c.req.header("X-User-Id");
-  if (!userId) {
-    return c.json(
-      { success: false, error: "Missing X-User-Id header" },
-      401
-    );
-  }
+  const userId = c.get("userId") as string;
 
   const result = await db
     .select({
@@ -80,13 +78,7 @@ userRoutes.put(
     }
   }),
   async (c) => {
-    const userId = c.req.header("X-User-Id");
-    if (!userId) {
-      return c.json(
-        { success: false, error: "Missing X-User-Id header" },
-        401
-      );
-    }
+    const userId = c.get("userId") as string;
 
     const body = c.req.valid("json");
 
