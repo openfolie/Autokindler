@@ -13,8 +13,5 @@
     "sourceMap": true,
     "composite": true
   },
-  "references": [
-    { "path": "packages/db" },
-    { "path": "apps/api" }
-  ]
+  "references": [{ "path": "packages/db" }, { "path": "apps/api" }]
 }

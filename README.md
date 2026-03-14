@@ -21,7 +21,8 @@
   <br />
   <br />
 
-  > **A distributed document delivery pipeline and Chrome Extension designed to seamlessly send academic research papers from arXiv directly to Amazon Kindle devices.**
+> **A distributed document delivery pipeline and Chrome Extension designed to seamlessly send academic research papers from arXiv directly to Amazon Kindle devices.**
+
 </div>
 
 <br />
@@ -30,13 +31,13 @@ By bypassing complex local setups, AutoKindler allows users to trigger document 
 
 ## key features
 
-* **One-click delivery:** A Chrome Extension that activates solely on `arxiv.org/html/*` and `*.pdf` URLs.
-* **smart conversion (mvp):**
-  * Directly passes through PDF files to preserve native formatting.
-  * Converts arXiv HTML versions into highly readable EPUB files using Pandoc.
-* **automated subscriptions:** Scheduled daily delivery of top CS/AI papers sourced from the Hugging Face Daily Papers API, matched to your custom category preferences.
-* **asynchronous processing:** Heavy document conversion tasks are decoupled from the API using AWS SQS and processed by a scalable Python worker pool.
-* **live status tracking:** The extension polls the API to provide real-time `Pending`, `Completed`, or `Failed` native browser notifications.
+- **One-click delivery:** A Chrome Extension that activates solely on `arxiv.org/html/*` and `*.pdf` URLs.
+- **smart conversion (mvp):**
+  - Directly passes through PDF files to preserve native formatting.
+  - Converts arXiv HTML versions into highly readable EPUB files using Pandoc.
+- **automated subscriptions:** Scheduled daily delivery of top CS/AI papers sourced from the Hugging Face Daily Papers API, matched to your custom category preferences.
+- **asynchronous processing:** Heavy document conversion tasks are decoupled from the API using AWS SQS and processed by a scalable Python worker pool.
+- **live status tracking:** The extension polls the API to provide real-time `Pending`, `Completed`, or `Failed` native browser notifications.
 
 ---
 
@@ -48,7 +49,7 @@ The project is built as a monorepo containing three core compute components back
 2. **api & scheduler:** A TypeScript Hono server that handles extension requests, user state (via GitHub OAuth), and runs a daily `node-cron` job.
 3. **workers:** Python workers that poll AWS SQS, download/convert papers, and dispatch emails via AWS SES (using standard SMTP).
 
-*(for a detailed breakdown, see the [system architecture](docs/architecture.md) document).*
+_(for a detailed breakdown, see the [system architecture](docs/architecture.md) document)._
 
 ---
 
@@ -61,7 +62,7 @@ This project requires **Docker** for running the database and local queues, and 
 ```bash
 git clone https://github.com/yourusername/autokindler.git
 cd autokindler
-````
+```
 
 ### 2. start local infrastructure (postgres, localstack for sqs)
 
@@ -94,28 +95,27 @@ pnpm run dev
 
 ### 5. load the extension
 
-* Open Chrome and navigate to `chrome://extensions/`
-* Enable **Developer mode** in the top right corner
-* Click **Load unpacked** and select the `apps/extension/dist` directory
+- Open Chrome and navigate to `chrome://extensions/`
+- Enable **Developer mode** in the top right corner
+- Click **Load unpacked** and select the `apps/extension/dist` directory
 
 ---
 
 ## documentation index
 
-* **[AGENT.md](AGENT.md)** — Context, constraints, and instructions for LLM coding agents.
-* **[development guide](docs/development.md)** — Monorepo structure, tooling, and local workflows.
+- **[AGENT.md](AGENT.md)** — Context, constraints, and instructions for LLM coding agents.
+- **[development guide](docs/development.md)** — Monorepo structure, tooling, and local workflows.
 
 ### system design & product
 
-* **[project overview](docs/overview.md)** — Core problem, target users, and value proposition.
-* **[system architecture](docs/architecture.md)** — Component diagrams and data flows.
-* **[product specification](docs/product-spec.md)** — User flows, personas, and edge cases.
-* **[data model](docs/data-model.md)** — Postgres schemas and JSONB structures.
-* **[api specification](docs/api-spec.md)** — REST endpoints, schemas, and rate limits.
+- **[project overview](docs/overview.md)** — Core problem, target users, and value proposition.
+- **[system architecture](docs/architecture.md)** — Component diagrams and data flows.
+- **[product specification](docs/product-spec.md)** — User flows, personas, and edge cases.
+- **[data model](docs/data-model.md)** — Postgres schemas and JSONB structures.
+- **[api specification](docs/api-spec.md)** — REST endpoints, schemas, and rate limits.
 
 ### operations & security
 
-* **[operations](docs/operations.md)** — Deployment via SST, queue management, and logging.
-* **[security model](docs/security.md)** — Auth flow, authorization, and SES abuse prevention.
-* **[roadmap](docs/roadmap.md)** — Future extensions (e.g., LaTeX compilation, LLM curation).
-
+- **[operations](docs/operations.md)** — Deployment via SST, queue management, and logging.
+- **[security model](docs/security.md)** — Auth flow, authorization, and SES abuse prevention.
+- **[roadmap](docs/roadmap.md)** — Future extensions (e.g., LaTeX compilation, LLM curation).

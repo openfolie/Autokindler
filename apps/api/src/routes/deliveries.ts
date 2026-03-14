@@ -41,7 +41,7 @@ deliveryRoutes.post(
           success: false,
           error: result.error.issues.map((i) => i.message).join("; "),
         },
-        400
+        400,
       );
     }
   }),
@@ -67,7 +67,7 @@ deliveryRoutes.post(
           success: false,
           error: "Kindle email not configured. Please set it in your profile.",
         },
-        400
+        400,
       );
     }
 
@@ -97,7 +97,7 @@ deliveryRoutes.post(
             status: delivery.status,
           },
         },
-        202
+        202,
       );
     } catch (err: unknown) {
       // Check for unique constraint violation (duplicate delivery)
@@ -105,12 +105,12 @@ deliveryRoutes.post(
       if (pgError.code === "23505") {
         return c.json(
           { success: false, error: "Paper already submitted" },
-          409
+          409,
         );
       }
       throw err;
     }
-  }
+  },
 );
 
 // GET /api/deliveries/:id — check delivery status

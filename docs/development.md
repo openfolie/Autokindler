@@ -1,15 +1,16 @@
 # Development Guide
 
-This document outlines how to set up, run, and contribute to the AutoKindler monorepo. 
+This document outlines how to set up, run, and contribute to the AutoKindler monorepo.
 
 ## Prerequisites
 
 Ensure you have the latest stable versions of the following tools installed:
-* **Node.js:** v22 LTS (or higher)
-* **Package Manager:** `pnpm` v9+ (Required for monorepo workspace management)
-* **Python:** v3.13+
-* **Docker Engine & Docker Compose:** For running local infrastructure (Postgres, LocalStack).
-* **Pandoc:** Required locally for the Python worker (`brew install pandoc` on macOS or `apt-get install pandoc` on Linux).
+
+- **Node.js:** v22 LTS (or higher)
+- **Package Manager:** `pnpm` v9+ (Required for monorepo workspace management)
+- **Python:** v3.13+
+- **Docker Engine & Docker Compose:** For running local infrastructure (Postgres, LocalStack).
+- **Pandoc:** Required locally for the Python worker (`brew install pandoc` on macOS or `apt-get install pandoc` on Linux).
 
 ## Repository Structure
 
@@ -23,7 +24,7 @@ autokindler/
 │   └── workers/      # Python SQS Consumers (pypandoc, smtplib)
 ├── packages/
 │   └── db/           # Shared database schema and migrations (Drizzle ORM)
-├── infra/            
+├── infra/
 │   └── docker-compose.yml # Local services (Postgres + LocalStack)
 ├── sst.config.ts     # SST v3 (Ion) Infrastructure as Code
 ├── package.json
@@ -34,6 +35,7 @@ autokindler/
 ## Local Setup
 
 1. **Clone and Install:**
+
 ```bash
 git clone [https://github.com/yourusername/autokindler.git](https://github.com/yourusername/autokindler.git)
 cd autokindler
@@ -41,34 +43,31 @@ pnpm install
 
 ```
 
-
 2. **Start Local Infrastructure:**
-This spins up a local PostgreSQL 16+ instance and LocalStack (to simulate AWS SQS locally).
+   This spins up a local PostgreSQL 16+ instance and LocalStack (to simulate AWS SQS locally).
+
 ```bash
 cd infra
 docker-compose up -d
 
 ```
 
-
 3. **Environment Variables:**
-Copy the example environment files in each app:
+   Copy the example environment files in each app:
+
 ```bash
 cp apps/api/.env.example apps/api/.env
 cp apps/workers/.env.example apps/workers/.env
 
 ```
 
-
-*Note: Ensure your local `DATABASE_URL` matches the credentials in `docker-compose.yml`.*
-4. **Run Database Migrations:**
+_Note: Ensure your local `DATABASE_URL` matches the credentials in `docker-compose.yml`._ 4. **Run Database Migrations:**
 We use Drizzle ORM. Push the schema to your local Postgres container:
+
 ```bash
 pnpm --filter @autokindler/db db:push
 
 ```
-
-
 
 ## Development Workflow
 
@@ -82,9 +81,9 @@ pnpm run dev
 
 ### Running Components Individually
 
-* **API:** `pnpm --filter @autokindler/api dev`
-* **Extension:** `pnpm --filter @autokindler/extension build --watch`
-* **Worker:** See the "Worker Architecture" section below.
+- **API:** `pnpm --filter @autokindler/api dev`
+- **Extension:** `pnpm --filter @autokindler/extension build --watch`
+- **Worker:** See the "Worker Architecture" section below.
 
 ### Loading the Extension in Chrome
 
@@ -117,20 +116,19 @@ python main.py
 
 ## Testing Strategy
 
-* **API & Database:** Use Vitest. Tests are co-located with their features (`user.test.ts`). Focus tests on the `node-cron` matching logic and API rate limits.
+- **API & Database:** Use Vitest. Tests are co-located with their features (`user.test.ts`). Focus tests on the `node-cron` matching logic and API rate limits.
+
 ```bash
 pnpm test:api
 
 ```
 
+- **Python Workers:** Use `pytest`. The `MessageQueue` adapter pattern allows you to mock the SQS queue entirely for unit testing the conversion logic.
 
-* **Python Workers:** Use `pytest`. The `MessageQueue` adapter pattern allows you to mock the SQS queue entirely for unit testing the conversion logic.
 ```bash
 cd apps/workers && pytest
 
 ```
-
-
 
 ## Git Workflow
 

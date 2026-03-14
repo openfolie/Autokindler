@@ -59,7 +59,7 @@ export const deliveryLog = pgTable(
   },
   (table) => [
     uniqueIndex("delivery_user_url_idx").on(table.userId, table.sourceUrl),
-  ]
+  ],
 );
 
 // ─── Relations ───────────────────────────────────────────────────────────────
@@ -79,7 +79,7 @@ export const userPreferencesRelations = relations(
       fields: [userPreferences.userId],
       references: [users.id],
     }),
-  })
+  }),
 );
 
 export const deliveryLogRelations = relations(deliveryLog, ({ one }) => ({

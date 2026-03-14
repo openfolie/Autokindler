@@ -9,12 +9,7 @@ const updateUserSchema = z.object({
   kindle_email: z.string().email("Must be a valid email").optional(),
   preferences: z
     .object({
-      max_papers_per_month: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .optional(),
+      max_papers_per_month: z.number().int().min(1).max(100).optional(),
       category_scores: z
         .record(z.string(), z.number().min(1).max(10))
         .optional(),
@@ -73,7 +68,7 @@ userRoutes.put(
           success: false,
           error: result.error.issues.map((i) => i.message).join("; "),
         },
-        400
+        400,
       );
     }
   }),
@@ -134,5 +129,5 @@ userRoutes.put(
       success: true,
       data: { message: "Preferences updated successfully." },
     });
-  }
+  },
 );

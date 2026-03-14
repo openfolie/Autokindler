@@ -2,10 +2,10 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { serve } from "@hono/node-server";
-import { env } from "./lib/env.js";
-import { authRoutes } from "./routes/auth.js";
-import { deliveryRoutes } from "./routes/deliveries.js";
-import { userRoutes } from "./routes/users.js";
+import { env } from "./lib/env";
+import { authRoutes } from "./routes/auth";
+import { deliveryRoutes } from "./routes/deliveries";
+import { userRoutes } from "./routes/users";
 
 const app = new Hono();
 

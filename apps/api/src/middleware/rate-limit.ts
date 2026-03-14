@@ -42,7 +42,7 @@ export function rateLimiter(opts: {
           success: false,
           error: `Rate limit exceeded. Maximum ${opts.max} delivery requests per hour.`,
         },
-        429
+        429,
       );
     }
 

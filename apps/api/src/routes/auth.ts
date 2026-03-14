@@ -32,7 +32,7 @@ authRoutes.get("/github", (c) => {
   });
 
   return c.redirect(
-    `https://github.com/login/oauth/authorize?${params.toString()}`
+    `https://github.com/login/oauth/authorize?${params.toString()}`,
   );
 });
 
@@ -47,9 +47,7 @@ authRoutes.get("/github/callback", async (c) => {
 
   // Validate state parameter
   if (!state || !storedState || state !== storedState) {
-    return c.redirect(
-      `${env.APP_URL}/auth/callback?error=invalid_state`
-    );
+    return c.redirect(`${env.APP_URL}/auth/callback?error=invalid_state`);
   }
 
   // Clear the state cookie
@@ -60,9 +58,7 @@ authRoutes.get("/github/callback", async (c) => {
   });
 
   if (!code) {
-    return c.redirect(
-      `${env.APP_URL}/auth/callback?error=missing_code`
-    );
+    return c.redirect(`${env.APP_URL}/auth/callback?error=missing_code`);
   }
 
   try {
@@ -80,7 +76,7 @@ authRoutes.get("/github/callback", async (c) => {
           client_secret: env.GITHUB_CLIENT_SECRET,
           code,
         }),
-      }
+      },
     );
 
     const tokenData = (await tokenResponse.json()) as {
@@ -92,7 +88,7 @@ authRoutes.get("/github/callback", async (c) => {
     if (tokenData.error || !tokenData.access_token) {
       console.error("GitHub token exchange failed:", tokenData.error);
       return c.redirect(
-        `${env.APP_URL}/auth/callback?error=token_exchange_failed`
+        `${env.APP_URL}/auth/callback?error=token_exchange_failed`,
       );
     }
 
@@ -115,10 +111,12 @@ authRoutes.get("/github/callback", async (c) => {
     ]);
 
     if (!userResponse.ok || !emailsResponse.ok) {
-      console.error("GitHub API call failed:", userResponse.status, emailsResponse.status);
-      return c.redirect(
-        `${env.APP_URL}/auth/callback?error=github_api_failed`
+      console.error(
+        "GitHub API call failed:",
+        userResponse.status,
+        emailsResponse.status,
       );
+      return c.redirect(`${env.APP_URL}/auth/callback?error=github_api_failed`);
     }
 
     const emails = (await emailsResponse.json()) as Array<{
@@ -130,9 +128,7 @@ authRoutes.get("/github/callback", async (c) => {
     // Find primary verified email
     const primaryEmail = emails.find((e) => e.primary && e.verified);
     if (!primaryEmail) {
-      return c.redirect(
-        `${env.APP_URL}/auth/callback?error=no_verified_email`
-      );
+      return c.redirect(`${env.APP_URL}/auth/callback?error=no_verified_email`);
     }
 
     const email = primaryEmail.email;
@@ -169,13 +165,9 @@ authRoutes.get("/github/callback", async (c) => {
     });
 
     // Redirect to frontend callback with token for extension to capture
-    return c.redirect(
-      `${env.APP_URL}/auth/callback?token=${jwt}`
-    );
+    return c.redirect(`${env.APP_URL}/auth/callback?token=${jwt}`);
   } catch (err) {
     console.error("OAuth callback error:", err);
-    return c.redirect(
-      `${env.APP_URL}/auth/callback?error=auth_failed`
-    );
+    return c.redirect(`${env.APP_URL}/auth/callback?error=auth_failed`);
   }
 });

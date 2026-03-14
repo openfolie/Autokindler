@@ -1,7 +1,4 @@
-import {
-  SQSClient,
-  SendMessageCommand,
-} from "@aws-sdk/client-sqs";
+import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { env } from "./env.js";
 
 const sqsClient = new SQSClient({
