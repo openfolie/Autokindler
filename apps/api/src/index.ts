@@ -3,6 +3,7 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { serve } from "@hono/node-server";
 import { env } from "./lib/env.js";
+import { authRoutes } from "./routes/auth.js";
 import { deliveryRoutes } from "./routes/deliveries.js";
 import { userRoutes } from "./routes/users.js";
 
@@ -12,10 +13,13 @@ const app = new Hono();
 app.use("*", cors());
 app.use("*", logger());
 
-// Health check
+// Health check (public)
 app.get("/health", (c) => c.json({ status: "ok" }));
 
-// Mount routes
+// Auth routes (public — these ARE the auth mechanism)
+app.route("/api/auth", authRoutes);
+
+// Protected routes (auth middleware applied inside each router)
 app.route("/api/deliveries", deliveryRoutes);
 app.route("/api/users", userRoutes);
 
