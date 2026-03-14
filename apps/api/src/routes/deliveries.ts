@@ -4,6 +4,7 @@ import { z } from "zod";
 import { eq, and } from "drizzle-orm";
 import { db, users, deliveryLog } from "@autokindler/db";
 import { enqueueDelivery } from "../lib/sqs.js";
+import { rateLimiter } from "../middleware/rate-limit.js";
 
 const arxivUrlPattern =
   /^https?:\/\/arxiv\.org\/(abs|html|pdf)\/\d{4}\.\d{4,5}(v\d+)?(\.pdf)?$/;
@@ -22,9 +23,13 @@ const uuidSchema = z.string().uuid();
 
 export const deliveryRoutes = new Hono();
 
+// Rate limit: 5 POST requests per hour per user
+const deliveryRateLimit = rateLimiter({ windowMs: 3600000, max: 5 });
+
 // POST /api/deliveries — create a new delivery
 deliveryRoutes.post(
   "/",
+  deliveryRateLimit,
   zValidator("json", createDeliverySchema, (result, c) => {
     if (!result.success) {
       return c.json(
