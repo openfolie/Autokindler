@@ -9,29 +9,29 @@ See: .planning/PROJECT.md (updated 2026-03-14)
 
 ## Current Position
 
-Phase: 1 of 4 (Backend Foundation)
-Plan: 2 of 3 in current phase
-Status: Executing
-Last activity: 2026-03-14 — Completed 01-02-PLAN.md
+Phase: 1 of 4 (Backend Foundation) — COMPLETE
+Plan: 3 of 3 in current phase ✓
+Status: Phase Complete
+Last activity: 2026-03-14 — Completed 01-03-PLAN.md
 
-Progress: [██░░░░░░░░] 22%
+Progress: [███░░░░░░░] 33%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: 18 min
-- Total execution time: 0.6 hours
+- Total plans completed: 3
+- Average duration: 14 min
+- Total execution time: 0.7 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Backend Foundation | 2/3 | 36 min | 18 min |
+| 1. Backend Foundation | 3/3 ✓ | 41 min | 14 min |
 
 **Recent Trend:**
-- Last 5 plans: 9 min, 27 min
-- Trend: -
+- Last 5 plans: 9 min, 27 min, 5 min
+- Trend: ↓
 
 *Updated after each plan completion*
 
@@ -51,6 +51,10 @@ Recent decisions affecting current work:
 - [01-02]: Stub auth via X-User-Id header — Plan 03 replaces with JWT
 - [01-02]: In-memory rate limiter (no Redis) — sufficient for single-instance MVP
 - [01-02]: drizzle-orm added as direct API dep for query operators (eq, and)
+- [01-03]: jose for JWT (ESM-native, HS256, 7d expiry) — Edge-compatible
+- [01-03]: Dual token delivery: httpOnly cookie + redirect query param for extension
+- [01-03]: Auth middleware at router level via .use('*', authMiddleware)
+- [01-03]: X-User-Id header stub fully removed — real JWT auth in place
 
 ### Pending Todos
 
@@ -65,5 +69,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-14
-Stopped at: Completed 01-02-PLAN.md
+Stopped at: Completed 01-03-PLAN.md — Phase 1 complete
 Resume file: None
