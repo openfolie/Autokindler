@@ -1,0 +1,18 @@
+[project]
+name = "autokindler-workers"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.42.68",
+    "httpx>=0.28.1",
+    "psycopg[binary]>=3.3.3",
+    "pydantic-settings>=2.13.1",
+    "pypandoc>=1.16.2",
+    "structlog>=25.5.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]

@@ -16,3 +16,8 @@ dist/
 
 # Drizzle generated migrations
 drizzle/
+
+# Python
+__pycache__/
+*.pyc
+.venv/

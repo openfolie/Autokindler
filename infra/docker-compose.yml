@@ -20,10 +20,29 @@ services:
     ports:
       - "4566:4566"
     environment:
-      SERVICES: sqs
+      SERVICES: sqs,ses
       DEFAULT_REGION: us-east-1
     volumes:
       - ./localstack:/etc/localstack/init/ready.d
+
+  worker:
+    build:
+      context: ../apps/workers
+    depends_on:
+      postgres:
+        condition: service_healthy
+      localstack:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgres://autokindler:autokindler@postgres:5432/autokindler
+      SQS_ENDPOINT: http://localstack:4566
+      SQS_QUEUE_URL: http://localstack:4566/000000000000/autokindler-deliveries
+      AWS_REGION: us-east-1
+      SES_SMTP_HOST: localstack
+      SES_SMTP_PORT: 4566
+      SES_FROM_EMAIL: autokindler@openfolie.org
+      CACHE_DIR: /tmp/autokindler-cache
+    restart: unless-stopped
 
 volumes:
   pgdata:
