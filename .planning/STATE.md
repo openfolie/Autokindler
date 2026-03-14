@@ -10,27 +10,28 @@ See: .planning/PROJECT.md (updated 2026-03-14)
 ## Current Position
 
 Phase: 2 of 4 (Delivery Engine)
-Plan: 0 of 2 in current phase
-Status: Ready to plan
-Last activity: 2026-03-14 — Phase 1 verified (5/5 must-haves passed)
+Plan: 1 of 2 in current phase
+Status: Executing
+Last activity: 2026-03-14 — Completed 02-01-PLAN.md (Worker skeleton)
 
-Progress: [███░░░░░░░] 33%
+Progress: [████░░░░░░] 44%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 14 min
-- Total execution time: 0.7 hours
+- Total plans completed: 4
+- Average duration: 12 min
+- Total execution time: 0.8 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. Backend Foundation | 3/3 ✓ | 41 min | 14 min |
+| 2. Delivery Engine | 1/2 | 8 min | 8 min |
 
 **Recent Trend:**
-- Last 5 plans: 9 min, 27 min, 5 min
+- Last 5 plans: 9 min, 27 min, 5 min, 8 min
 - Trend: ↓
 
 *Updated after each plan completion*
@@ -55,6 +56,10 @@ Recent decisions affecting current work:
 - [01-03]: Dual token delivery: httpOnly cookie + redirect query param for extension
 - [01-03]: Auth middleware at router level via .use('*', authMiddleware)
 - [01-03]: X-User-Id header stub fully removed — real JWT auth in place
+- [02-01]: ABC interfaces for MessageQueue, EmailSender — testability and future swapability
+- [02-01]: Always-ACK pattern: message deleted regardless of outcome, DLQ handles retries
+- [02-01]: Malformed SQS messages ACKed immediately to prevent poison pill loops
+- [02-01]: structlog with JSON output (production) / ConsoleRenderer (local dev)
 
 ### Pending Todos
 
@@ -69,5 +74,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-14
-Stopped at: Completed 01-03-PLAN.md — Phase 1 complete
+Stopped at: Completed 02-01-PLAN.md — Worker skeleton with interfaces
 Resume file: None
