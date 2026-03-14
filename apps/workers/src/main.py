@@ -15,6 +15,7 @@ from .cache.file_cache import FileCache
 from .config import Settings
 from .db import get_connection, update_delivery_status
 from .email.ses_adapter import SESEmailSender
+from .pipeline.orchestrator import process_delivery
 from .queue.interface import DeliveryTask
 from .queue.sqs_adapter import SQSQueue
 
@@ -46,19 +47,18 @@ def process_task(
     email_sender: SESEmailSender,
     cache: FileCache,
 ) -> None:
-    """Process a single delivery task.
+    """Process a single delivery task through the full pipeline.
 
-    **STUB** — logs the task and marks it as Completed.
-    Plan 02 will replace this with the full download → convert → email pipeline.
+    Delegates to process_delivery which handles all error cases internally
+    and NEVER raises. Status is always updated in the database.
     """
-    log.info(
-        "processing_task_stub",
-        delivery_id=task.delivery_id,
-        url=task.url,
-        kindle_email=task.kindle_email,
+    process_delivery(
+        task=task,
+        cache=cache,
+        email_sender=email_sender,
+        db_conn=conn,
+        settings=settings,
     )
-    # Stub: mark as completed immediately
-    update_delivery_status(conn, task.delivery_id, "Completed")
 
 
 def _cache_cleanup_loop(cache: FileCache, shutdown: threading.Event) -> None:
